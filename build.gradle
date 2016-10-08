@@ -15,9 +15,10 @@ buildscript {
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
+apply plugin: 'idea'
 
-sourceCompatibility = javaVersion
-targetCompatibility = javaVersion
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
@@ -32,14 +33,8 @@ sourceSets {
 }
 
 intellij {
-    version ideaVersion
+    version 'IC-15.0.5'
     pluginName 'JustPlugin'
     updateSinceUntilBuild false
-    downloadSources Boolean.valueOf(downloadIdeaSources)
-
-    publish {
-        channels publishChannels
-        username publishUsername
-        password publishPassword
-    }
+    downloadSources false
 }
