@@ -32,9 +32,9 @@
   </project-components>
 
   <actions>
-    <group id="MyPlugin.SampleMenu" text="Greeting" description="Greeting menu">
+    <group id="MyPlugin.SampleMenu" text="JustPlugin" description="wow such menu">
       <add-to-group group-id="MainMenu" anchor="last"/>
-      <action id="Myplugin.Textboxes" class="main.HelloAction" text="Hello" description="Says hello"/>
+      <action id="Myplugin.Textboxes" class="main.CountAction" text="Show code typed" description="wow such description"/>
     </group>
   </actions>
 
