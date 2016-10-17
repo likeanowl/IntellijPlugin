@@ -1,9 +1,11 @@
 package main;
 
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.actionSystem.EditorAction;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
@@ -19,11 +21,11 @@ public class KeyPressedHandler implements TypedActionHandler {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                ApplicationManager.getApplication().runReadAction(this);
                 textLength = document.getTextLength();
                 symbolsTyped++;
             }
         };
-        WriteCommandAction.runWriteCommandAction(project, runnable);
     }
 
     public int getTextLength() {
