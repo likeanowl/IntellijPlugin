@@ -11,26 +11,19 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 public class KeyPressedHandler implements TypedActionHandler {
-    private int textLength = 0;
+
     private int symbolsTyped = 0;
 
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
-        final Document document = editor.getDocument();
-        Project project = editor.getProject();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                ApplicationManager.getApplication().runReadAction(this);
-                textLength = document.getTextLength();
-                symbolsTyped++;
-            }
+        Runnable runnable = () -> {
+            symbolsTyped++;
+            Document doc = editor.getDocument();
+            doc.setText(String.valueOf(charTyped));
         };
+        ApplicationManager.getApplication().runWriteAction(runnable);
     }
 
-    public int getTextLength() {
-        return textLength;
-    }
     public int getSymbolsTyped() {
         return symbolsTyped;
     }

@@ -15,25 +15,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class CountingAction extends AnAction {
-    private final KeyPressedHandler keyPressedHandler;
-    private int symbolsTyped;
+    private final KeyPressedHandler keyPressedHandler = new KeyPressedHandler();
+    private final EditorActionManager actionManager = EditorActionManager.getInstance();
+    private final TypedAction typedAction = actionManager.getTypedAction();
 
     public CountingAction() {
         super("Counting");
-        keyPressedHandler = new KeyPressedHandler();
-        symbolsTyped = 0;
-    }
-
-    @Override
-    public void update(@NotNull final AnActionEvent anActionEvent) {
-        final EditorActionManager actionManager = EditorActionManager.getInstance();
-        final TypedAction typedAction = actionManager.getTypedAction();
         typedAction.setupHandler(keyPressedHandler);
     }
 
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
-        this.symbolsTyped = keyPressedHandler.getSymbolsTyped();
-        Messages.showInfoMessage("Symbols typed: " + symbolsTyped, "Symbols typed");
+        Messages.showInfoMessage("Symbols typed: " + keyPressedHandler.getSymbolsTyped(), "Symbols typed");
     }
 }

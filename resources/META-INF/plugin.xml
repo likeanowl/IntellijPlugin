@@ -34,7 +34,7 @@
   <actions>
     <group id="MyPlugin.SampleMenu" text="JustPlugin" description="wow such menu">
       <add-to-group group-id="MainMenu" anchor="last"/>
-      <action id="Myplugin.Textboxes" class="main.CountAction" text="Show code typed" description="wow such description"/>
+      <action id="Myplugin.Textboxes" class="main.CountingAction" text="Show code typed" description="wow such description"/>
     </group>
   </actions>
 
