@@ -36,5 +36,5 @@ intellij {
     version 'IC-15.0.5'
     pluginName 'JustPlugin'
     updateSinceUntilBuild false
-    downloadSources false
+    downloadSources true
 }
