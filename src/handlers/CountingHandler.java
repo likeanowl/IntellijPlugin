@@ -1,5 +1,5 @@
 /*
- * JustPlugin - let me show you that IDE is better than just text editor!
+ * JustPlugin - let it show you that IDE is better than just text editor!
  * Copyright (C) 2016 Svitkov Sergey
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,17 +24,15 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+import stuff.Counter;
 
-public class CountingTypedHandler extends TypedHandlerDelegate {
-    private int typedSymbols = 0;
+public class CountingHandler extends TypedHandlerDelegate {
+    private Counter counter;
 
     @Override
     public Result charTyped(char c, final Project project, final @NotNull Editor editor, @NotNull final PsiFile file) {
-        ApplicationManager.getApplication().runReadAction((Runnable) () -> typedSymbols++);
+        counter = project.getComponent(Counter.class);
+        ApplicationManager.getApplication().runReadAction(counter::increment);
         return Result.CONTINUE;
-    }
-
-    public int getTypedSymbols() {
-        return typedSymbols;
     }
 }

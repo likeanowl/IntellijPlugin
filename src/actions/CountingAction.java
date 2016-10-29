@@ -1,5 +1,5 @@
 /*
- * JustPlugin - let me show you that IDE is better than just text editor!
+ * JustPlugin - let it show you that IDE is better than just text editor!
  * Copyright (C) 2016 Svitkov Sergey
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,24 +15,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package main;
+
+package actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.psi.impl.source.tree.PlainTextASTFactory;
+import stuff.Counter;
 
-import java.util.Map;
+public class CountingAction  extends AnAction {
 
-public class JustPlugin {
-
-    public JustPlugin() {
+    @Override
+    public void actionPerformed(AnActionEvent e) {
+        Counter counter = e.getProject().getComponent(Counter.class);
+        if (counter != null) {
+            Messages.showInfoMessage("Symbols typed: " + counter.getTypedSymbolsCount()
+                                    + "\nTotal symbols: " + e.getData(CommonDataKeys.EDITOR)
+                                    .getDocument().getTextLength(), "Just Plugin");
+        } else {
+            Messages.showErrorDialog("Somewhy counter component is null", "Just Plugin");
+        }
     }
-
 }

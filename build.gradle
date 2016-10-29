@@ -35,6 +35,6 @@ sourceSets {
 intellij {
     version 'IC-15.0.5'
     pluginName 'JustPlugin'
-    updateSinceUntilBuild false
+    updateSinceUntilBuild true
     downloadSources true
 }

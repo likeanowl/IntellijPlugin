@@ -23,18 +23,22 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
+    <typedHandler implementation="handlers.CountingHandler"/>
   </extensions>
 
   <application-components>
   </application-components>
 
   <project-components>
+    <component>
+      <implementation-class>stuff.Counter</implementation-class>
+    </component>
   </project-components>
 
   <actions>
     <group id="MyPlugin.SampleMenu" text="JustPlugin" description="wow such menu">
       <add-to-group group-id="MainMenu" anchor="last"/>
-      <action id="Myplugin.Textboxes" class="main.CountingAction" text="Show code typed" description="wow such description"/>
+      <action id="Myplugin.Textboxes" class="actions.CountingAction" text="Show code typed" description="wow such description"/>
     </group>
   </actions>
 
