@@ -1,64 +1,78 @@
 /*
- * JustPlugin - let it show you that IDE is better than just text editor!
- * Copyright (C) 2016 Svitkov Sergey
+ * Just plugin - see how IntellijIdea improving your performance!
+ * Copyright 2016 Svitkov Sergey
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package stuff;
 
-import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.components.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class Counter implements ProjectComponent {
-    private int typedSymbolsCount;
+@State(name = "Counter",
+        storages = {
+                @Storage(id = "dir"
+		                , file = "counter.xml"
+		                , scheme = StorageScheme.DIRECTORY_BASED)
+        })
+public class Counter implements ApplicationComponent, PersistentStateComponent<Counter.CounterState> {
 
-    public Counter() {
-        this.typedSymbolsCount = 0;
+	public static class CounterState {
+		public CounterState() {}
+
+		public int foo;
+	}
+
+    @Nullable
+    @Override
+    public CounterState getState() {
+        return counterState;
+    }
+
+    @Override
+    public void loadState(CounterState state) {
+        this.counterState = state;
+    }
+
+    public static Counter getInstance() {
+	    return ServiceManager.getService(Counter.class);
     }
 
     public void increment () {
-        typedSymbolsCount++;
+        counterState.foo++;
     }
 
     public int getTypedSymbolsCount() {
-        return typedSymbolsCount;
+        return counterState.foo;
     }
 
-    @Override
-    public void projectOpened() {
-        new Counter();
-    }
+	@Override
+	public void initComponent() {
 
-    @Override
-    public void projectClosed() {
 
-    }
+	}
 
-    @Override
-    public void initComponent() {
+	@Override
+	public void disposeComponent() {
+	}
 
-    }
+	@NotNull
+	@Override
+	public String getComponentName() {
+		return String.valueOf(Counter.class);
+	}
 
-    @Override
-    public void disposeComponent() {
-
-    }
-
-    @NotNull
-    @Override
-    public String getComponentName() {
-        return String.valueOf(Counter.class);
-    }
+	public CounterState counterState = new CounterState();
 }

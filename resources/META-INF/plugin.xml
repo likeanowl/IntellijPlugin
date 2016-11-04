@@ -24,15 +24,21 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <typedHandler implementation="handlers.CountingHandler"/>
+    <applicationService
+            serviceImplementation="stuff.Counter"
+            serviceInterface="stuff.Counter"
+            overrides="true"
+    />
   </extensions>
 
   <application-components>
+    <component>
+      <implementation-class>stuff.Counter</implementation-class>
+      <interface-class>stuff.Counter</interface-class>
+    </component>
   </application-components>
 
   <project-components>
-    <component>
-      <implementation-class>stuff.Counter</implementation-class>
-    </component>
   </project-components>
 
   <actions>
