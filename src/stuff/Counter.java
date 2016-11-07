@@ -21,6 +21,9 @@ import com.intellij.openapi.components.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @State(name = "Counter",
         storages = {
                 @Storage(id = "dir"
@@ -30,9 +33,11 @@ import org.jetbrains.annotations.Nullable;
 public class Counter implements ApplicationComponent, PersistentStateComponent<Counter.CounterState> {
 
 	public static class CounterState {
-		public CounterState() {}
+		public CounterState() {
+			stateMap = new HashMap<>();
+		}
 
-		public int foo;
+		public Map<String, Integer> stateMap;
 	}
 
     @Nullable
@@ -50,18 +55,31 @@ public class Counter implements ApplicationComponent, PersistentStateComponent<C
 	    return ServiceManager.getService(Counter.class);
     }
 
-    public void increment () {
-        counterState.foo++;
+    public void increment (@NotNull String fileName) {
+        if (counterState.stateMap != null && counterState.stateMap.get(fileName) != null)
+        	counterState.stateMap.put(fileName, counterState.stateMap.get(fileName) + 1);
+	    else if (counterState.stateMap != null)
+	    	counterState.stateMap.put(fileName, 1);
+	    else
+	    	counterState.stateMap = new HashMap<>();
     }
 
-    public int getTypedSymbolsCount() {
-        return counterState.foo;
+    public void decrement(String fileName) {
+	    if (counterState.stateMap != null && counterState.stateMap.get(fileName) != null)
+		    counterState.stateMap.put(fileName, counterState.stateMap.get(fileName) - 1);
+	    else
+	    	counterState.stateMap.put(fileName, 0);
+    }
+
+    public int getTypedSymbolsCount(@NotNull String fileName) {
+	    if (counterState.stateMap != null && counterState.stateMap.get(fileName) != null)
+		    return counterState.stateMap.get(fileName);
+	    else
+	    	return -1;
     }
 
 	@Override
 	public void initComponent() {
-
-
 	}
 
 	@Override

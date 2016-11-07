@@ -17,24 +17,27 @@
 
 package handlers;
 
-import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
+import com.intellij.codeInsight.editorActions.BackspaceHandlerDelegate;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
 import stuff.Counter;
 
-public class CountingHandler extends TypedHandlerDelegate {
+public class BackspaceHandler extends BackspaceHandlerDelegate{
 
-    @Override
-    public Result charTyped(char c, final Project project, final @NotNull Editor editor, @NotNull final PsiFile file) {
-        Counter counter = Counter.getInstance();
-	    Document currentDocument = editor.getDocument();
-	    String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getPresentableName();
-	    ApplicationManager.getApplication().runReadAction(() -> counter.increment(openedFileName));
-        return Result.CONTINUE;
-    }
+	@Override
+	public void beforeCharDeleted(char c, PsiFile file, Editor editor) {
+
+	}
+
+	@Override
+	public boolean charDeleted(char c, PsiFile file, Editor editor) {
+		Counter counter = Counter.getInstance();
+		Document currentDocument = editor.getDocument();
+		String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getPresentableName();
+		ApplicationManager.getApplication().runReadAction(() -> counter.decrement(openedFileName));
+		return false;
+	}
 }

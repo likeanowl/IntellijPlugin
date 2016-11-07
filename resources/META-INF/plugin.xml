@@ -24,6 +24,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <typedHandler implementation="handlers.CountingHandler"/>
+    <backspaceHandlerDelegate implementation="handlers.BackspaceHandler" />
     <applicationService
             serviceImplementation="stuff.Counter"
             serviceInterface="stuff.Counter"

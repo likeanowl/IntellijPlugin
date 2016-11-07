@@ -17,10 +17,9 @@
 
 package actions;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.Messages;
 import stuff.Counter;
 
@@ -30,9 +29,9 @@ public class CountingAction  extends AnAction {
     public void actionPerformed(AnActionEvent e) {
         Counter counter = Counter.getInstance();
         if (counter != null) {
-            Messages.showInfoMessage("Symbols typed: " + counter.getTypedSymbolsCount()
-                                    + "\nTotal symbols: " + e.getData(CommonDataKeys.EDITOR)
-                                    .getDocument().getTextLength(), "Just Plugin");
+	        String name = e.getData(PlatformDataKeys.VIRTUAL_FILE).getPresentableName();
+            Messages.showInfoMessage("Symbols typed in file " + name + ": "
+		            + counter.getTypedSymbolsCount(name), "Just Plugin");
         } else {
             Messages.showErrorDialog("Somewhy counter component is null", "Just Plugin");
         }
