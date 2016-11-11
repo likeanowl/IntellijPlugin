@@ -12,6 +12,7 @@ Plugin for IntellijIdea IDE. See how IntellijIdea improving your performance!
 		* Gradle project: PerfomanceMetricsPlugin
 		* Tasks: runIdea
 		* (optional) Script parameters: --stacktrace
+
 # Summary
 ------------
 Features as is:
