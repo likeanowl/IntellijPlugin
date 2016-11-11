@@ -1,5 +1,5 @@
 /*
- * Just plugin - see how IntellijIdea improving your performance!
+ * PerfomanceMetricsPlugin - see how IntellijIdea improving your performance!
  * Copyright 2016 Svitkov Sergey
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package handlers;
+package net.svitkov.PerfomanceMetricsPlugin.handlers;
 
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.openapi.application.ApplicationManager;
@@ -25,7 +25,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import stuff.Counter;
+import net.svitkov.PerfomanceMetricsPlugin.stuff.Counter;
 
 public class CountingHandler extends TypedHandlerDelegate {
 
@@ -33,7 +33,7 @@ public class CountingHandler extends TypedHandlerDelegate {
     public Result charTyped(char c, final Project project, final @NotNull Editor editor, @NotNull final PsiFile file) {
         Counter counter = Counter.getInstance();
 	    Document currentDocument = editor.getDocument();
-	    String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getPresentableName();
+	    String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getName();
 	    ApplicationManager.getApplication().runReadAction(() -> counter.increment(openedFileName));
         return Result.CONTINUE;
     }

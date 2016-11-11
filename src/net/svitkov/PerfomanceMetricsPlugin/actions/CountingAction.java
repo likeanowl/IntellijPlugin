@@ -1,5 +1,5 @@
 /*
- * Just plugin - see how IntellijIdea improving your performance!
+ * PerfomanceMetricsPlugin - see how IntellijIdea improving your performance!
  * Copyright 2016 Svitkov Sergey
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,25 +15,24 @@
  * limitations under the License.
  */
 
-package actions;
+package net.svitkov.PerfomanceMetricsPlugin.actions;
 
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.Messages;
-import stuff.Counter;
+import com.intellij.openapi.vfs.VirtualFile;
+import net.svitkov.PerfomanceMetricsPlugin.stuff.Counter;
 
 public class CountingAction  extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         Counter counter = Counter.getInstance();
-        if (counter != null) {
-	        String name = e.getData(PlatformDataKeys.VIRTUAL_FILE).getPresentableName();
-            Messages.showInfoMessage("Symbols typed in file " + name + ": "
-		            + counter.getTypedSymbolsCount(name), "Just Plugin");
+	    if (counter != null) {
+		    VirtualFile file = e.getData(PlatformDataKeys.VIRTUAL_FILE);
+            Messages.showInfoMessage("Symbols typed in file " + file.getPresentableName() + ": "
+		            + counter.getTypedSymbolsCount(file.getName()), "Just Plugin");
         } else {
-            Messages.showErrorDialog("Somewhy counter component is null", "Just Plugin");
+            //TODO: add logger
         }
     }
 }

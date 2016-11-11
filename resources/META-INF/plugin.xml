@@ -23,19 +23,19 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
-    <typedHandler implementation="handlers.CountingHandler"/>
-    <backspaceHandlerDelegate implementation="handlers.BackspaceHandler" />
+    <typedHandler implementation="net.svitkov.PerfomanceMetricsPlugin.handlers.CountingHandler"/>
+    <backspaceHandlerDelegate implementation="net.svitkov.PerfomanceMetricsPlugin.handlers.BackspaceHandler" />
     <applicationService
-            serviceImplementation="stuff.Counter"
-            serviceInterface="stuff.Counter"
+            serviceImplementation="net.svitkov.PerfomanceMetricsPlugin.stuff.Counter"
+            serviceInterface="net.svitkov.PerfomanceMetricsPlugin.stuff.Counter"
             overrides="true"
     />
   </extensions>
 
   <application-components>
     <component>
-      <implementation-class>stuff.Counter</implementation-class>
-      <interface-class>stuff.Counter</interface-class>
+      <implementation-class>net.svitkov.PerfomanceMetricsPlugin.stuff.Counter</implementation-class>
+      <interface-class>net.svitkov.PerfomanceMetricsPlugin.stuff.Counter</interface-class>
     </component>
   </application-components>
 
@@ -43,9 +43,12 @@
   </project-components>
 
   <actions>
-    <group id="MyPlugin.SampleMenu" text="JustPlugin" description="wow such menu">
+    <group id="PerfomanceMetricsPlugin.SampleMenu" text="Perfomance"
+           description="Shows your perfomance metrics">
       <add-to-group group-id="MainMenu" anchor="last"/>
-      <action id="Myplugin.Textboxes" class="actions.CountingAction" text="Show code typed" description="wow such description"/>
+      <action id="PerfomanceMetricsPlugin.Textboxes"
+              class="net.svitkov.PerfomanceMetricsPlugin.actions.CountingAction" text="Show metrics"
+              description=""/>
     </group>
   </actions>
 

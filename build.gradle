@@ -34,7 +34,7 @@ sourceSets {
 
 intellij {
     version 'IC-15.0.5'
-    pluginName 'JustPlugin'
+    pluginName 'PerfomanceMetricsPlugin'
     updateSinceUntilBuild true
     downloadSources true
 }

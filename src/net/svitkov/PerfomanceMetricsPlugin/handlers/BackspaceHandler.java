@@ -1,5 +1,5 @@
 /*
- * Just plugin - see how IntellijIdea improving your performance!
+ * PerfomanceMetricsPlugin - see how IntellijIdea improving your performance!
  * Copyright 2016 Svitkov Sergey
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package handlers;
+package net.svitkov.PerfomanceMetricsPlugin.handlers;
 
 import com.intellij.codeInsight.editorActions.BackspaceHandlerDelegate;
 import com.intellij.openapi.application.ApplicationManager;
@@ -23,7 +23,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.psi.PsiFile;
-import stuff.Counter;
+import net.svitkov.PerfomanceMetricsPlugin.stuff.Counter;
 
 public class BackspaceHandler extends BackspaceHandlerDelegate{
 
@@ -34,9 +34,10 @@ public class BackspaceHandler extends BackspaceHandlerDelegate{
 
 	@Override
 	public boolean charDeleted(char c, PsiFile file, Editor editor) {
+		// Probably could be simplified
 		Counter counter = Counter.getInstance();
 		Document currentDocument = editor.getDocument();
-		String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getPresentableName();
+		String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getName();
 		ApplicationManager.getApplication().runReadAction(() -> counter.decrement(openedFileName));
 		return false;
 	}
