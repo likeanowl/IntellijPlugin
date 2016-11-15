@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package net.svitkov.PerfomanceMetricsPlugin.stuff;
+package net.svitkov.ProductivityMetricsPlugin.stuff;
 
 import com.intellij.openapi.components.*;
 import org.jetbrains.annotations.NotNull;

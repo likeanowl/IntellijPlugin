@@ -1,10 +1,13 @@
-# PerfomanceMetricsPlugin
+# ProductivityMetricsPlugin
 ------------
-Plugin for IntellijIdea IDE. See how IntellijIdea improving your performance!
+Plugin for IntellijIdea IDE. See how IntellijIdea improving your productivity!
 # How to get it
 ------------
-* Get sources.
-* Run ''./gradlew build'' to perform initial build.
+* The easy way (get only binaries)
+    * Check ``Releases`` tab
+* The hard way (only for true Jedies)
+    * Get sources.
+    * Run ``./gradlew build`` to perform initial build.
 * Also you can set up run cofiguration in IntellijIdea IDE. To do this follow these steps below
 	* Open 'Run' tab
 	* Press 'Edit configurations' button
@@ -25,4 +28,4 @@ Features as is:
 	* Saves data between IDE restarts
 # License
 ------------
-PerfomanceMetricsPlugin is licensed under the terms of the GNU Public license version 2.
+ProductivityMetricsPlugin is licensed under the terms of the Apache License, Version 2.0

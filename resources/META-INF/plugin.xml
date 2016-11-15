@@ -23,19 +23,19 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
-    <typedHandler implementation="net.svitkov.PerfomanceMetricsPlugin.handlers.CountingHandler"/>
-    <backspaceHandlerDelegate implementation="net.svitkov.PerfomanceMetricsPlugin.handlers.BackspaceHandler" />
+    <typedHandler implementation="net.svitkov.ProductivityMetricsPlugin.handlers.CountingHandler"/>
+    <backspaceHandlerDelegate implementation="net.svitkov.ProductivityMetricsPlugin.handlers.BackspaceHandler" />
     <applicationService
-            serviceImplementation="net.svitkov.PerfomanceMetricsPlugin.stuff.Counter"
-            serviceInterface="net.svitkov.PerfomanceMetricsPlugin.stuff.Counter"
+            serviceImplementation="net.svitkov.ProductivityMetricsPlugin.stuff.Counter"
+            serviceInterface="net.svitkov.ProductivityMetricsPlugin.stuff.Counter"
             overrides="true"
     />
   </extensions>
 
   <application-components>
     <component>
-      <implementation-class>net.svitkov.PerfomanceMetricsPlugin.stuff.Counter</implementation-class>
-      <interface-class>net.svitkov.PerfomanceMetricsPlugin.stuff.Counter</interface-class>
+      <implementation-class>net.svitkov.ProductivityMetricsPlugin.stuff.Counter</implementation-class>
+      <interface-class>net.svitkov.ProductivityMetricsPlugin.stuff.Counter</interface-class>
     </component>
   </application-components>
 
@@ -43,11 +43,11 @@
   </project-components>
 
   <actions>
-    <group id="PerfomanceMetricsPlugin.SampleMenu" text="Perfomance"
-           description="Shows your perfomance metrics">
+    <group id="ProductivityMetricsPlugin.SampleMenu" text="Productivity"
+           description="Shows your productivity metrics">
       <add-to-group group-id="MainMenu" anchor="last"/>
-      <action id="PerfomanceMetricsPlugin.Textboxes"
-              class="net.svitkov.PerfomanceMetricsPlugin.actions.CountingAction" text="Show metrics"
+      <action id="ProductivityMetricsPlugin.Textboxes"
+              class="net.svitkov.ProductivityMetricsPlugin.actions.CountingAction" text="Show metrics"
               description=""/>
     </group>
   </actions>

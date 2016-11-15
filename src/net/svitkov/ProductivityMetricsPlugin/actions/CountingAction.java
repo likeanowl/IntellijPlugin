@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package net.svitkov.PerfomanceMetricsPlugin.actions;
+package net.svitkov.ProductivityMetricsPlugin.actions;
 
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-import net.svitkov.PerfomanceMetricsPlugin.stuff.Counter;
+import net.svitkov.ProductivityMetricsPlugin.stuff.Counter;
 
 public class CountingAction  extends AnAction {
 
