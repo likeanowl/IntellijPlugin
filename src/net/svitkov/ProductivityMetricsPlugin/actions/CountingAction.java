@@ -30,7 +30,7 @@ public class CountingAction  extends AnAction {
 	    if (counter != null) {
 		    VirtualFile file = e.getData(PlatformDataKeys.VIRTUAL_FILE);
             Messages.showInfoMessage("Symbols typed in file " + file.getPresentableName() + ": "
-		            + counter.getTypedSymbolsCount(file.getName()), "Just Plugin");
+		            + counter.getTypedSymbolsCount(file.getName()), "Productivity Metrics");
         } else {
             //TODO: add logger
         }

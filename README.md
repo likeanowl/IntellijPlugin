@@ -5,7 +5,7 @@ Plugin for IntellijIdea IDE. See how IntellijIdea improving your productivity!
 ------------
 * The easy way (get only binaries)
     * Check ``Releases`` tab
-* The hard way (only for true Jedies)
+* The hard way 
     * Get sources.
     * Run ``./gradlew build`` to perform initial build.
 * Also you can set up run cofiguration in IntellijIdea IDE. To do this follow these steps below
@@ -26,6 +26,7 @@ Features as is:
 * Alpha-release v.0.01:
 	* Counting typed symbols
 	* Saves data between IDE restarts
+	
 # License
 ------------
 ProductivityMetricsPlugin is licensed under the terms of the Apache License, Version 2.0
