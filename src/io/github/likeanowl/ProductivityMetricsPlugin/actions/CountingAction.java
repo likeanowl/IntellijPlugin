@@ -15,24 +15,31 @@
  * limitations under the License.
  */
 
-package net.svitkov.ProductivityMetricsPlugin.actions;
+package io.github.likeanowl.ProductivityMetricsPlugin.actions;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-import net.svitkov.ProductivityMetricsPlugin.stuff.Counter;
+import io.github.likeanowl.ProductivityMetricsPlugin.state.Counter;
 
 public class CountingAction  extends AnAction {
-
     @Override
     public void actionPerformed(AnActionEvent e) {
         Counter counter = Counter.getInstance();
-	    if (counter != null) {
+		    StringBuilder sb = new StringBuilder();
 		    VirtualFile file = e.getData(PlatformDataKeys.VIRTUAL_FILE);
-            Messages.showInfoMessage("Symbols typed in file " + file.getPresentableName() + ": "
-		            + counter.getTypedSymbolsCount(file.getName()), "Productivity Metrics");
-        } else {
-            //TODO: add logger
-        }
+		    assert file != null;
+		    sb.append("In this work session:")
+				    .append("\nTotal time spent on typing: ")
+				    .append("")
+				    .append("\nYour average typing speed:")
+				    .append("")
+				    .append("\nSymbols typed in file: ")
+				    .append(file.getPresentableName())
+				    .append(": ")
+				    .append(counter.getTypedSymbolsCount(file.getName()));
+            Messages.showInfoMessage(sb.toString(), "Productivity Metrics");
     }
 }

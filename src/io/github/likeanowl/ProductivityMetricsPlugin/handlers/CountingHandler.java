@@ -15,30 +15,29 @@
  * limitations under the License.
  */
 
-package net.svitkov.ProductivityMetricsPlugin.handlers;
+package io.github.likeanowl.ProductivityMetricsPlugin.handlers;
 
-import com.intellij.codeInsight.editorActions.BackspaceHandlerDelegate;
+import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import net.svitkov.ProductivityMetricsPlugin.stuff.Counter;
+import io.github.likeanowl.ProductivityMetricsPlugin.state.Counter;
+import org.jetbrains.annotations.NotNull;
 
-public class BackspaceHandler extends BackspaceHandlerDelegate{
-
-	@Override
-	public void beforeCharDeleted(char c, PsiFile file, Editor editor) {
-
-	}
+public class CountingHandler extends TypedHandlerDelegate {
 
 	@Override
-	public boolean charDeleted(char c, PsiFile file, Editor editor) {
-		// Probably could be simplified
+    public Result charTyped(char c, final Project project, final @NotNull Editor editor, @NotNull final PsiFile file) {
 		Counter counter = Counter.getInstance();
-		Document currentDocument = editor.getDocument();
-		String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getName();
-		ApplicationManager.getApplication().runReadAction(() -> counter.decrement(openedFileName));
-		return false;
-	}
+	    Document currentDocument = editor.getDocument();
+	    String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getName();
+		assert Thread.currentThread().equals(thread);
+	    ApplicationManager.getApplication().runReadAction(() -> counter.increment(openedFileName));
+        return Result.CONTINUE;
+    }
+
+	private final static Thread thread = Thread.currentThread();
 }

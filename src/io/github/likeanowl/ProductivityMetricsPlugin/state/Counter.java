@@ -15,14 +15,15 @@
  * limitations under the License.
  */
 
-package net.svitkov.ProductivityMetricsPlugin.stuff;
+package io.github.likeanowl.ProductivityMetricsPlugin.state;
 
 import com.intellij.openapi.components.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Serialization state
@@ -33,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 		                , file = "counter.xml"
 		                , scheme = StorageScheme.DIRECTORY_BASED)
         })
-public class Counter implements ApplicationComponent, PersistentStateComponent<Counter.CounterState> {
+public final class Counter implements ApplicationComponent, PersistentStateComponent<Counter.CounterState> {
 
 	/**
 	 * Nested class for saving serialization state.
@@ -42,10 +43,10 @@ public class Counter implements ApplicationComponent, PersistentStateComponent<C
 	 */
 	public static class CounterState {
 		public CounterState() {
-			stateMap = new ConcurrentHashMap<>();
+			stateMap = new HashMap<>();
 		}
 
-		public Map<String, Integer> stateMap;
+		@NotNull public final Map<String, Integer> stateMap;
 	}
 
     @Nullable
@@ -55,10 +56,11 @@ public class Counter implements ApplicationComponent, PersistentStateComponent<C
     }
 
     @Override
-    public void loadState(CounterState state) {
+    public void loadState(@Nullable CounterState state) {
         this.counterState = state;
     }
 
+    @NotNull
     public static Counter getInstance() {
 	    return ServiceManager.getService(Counter.class);
     }
@@ -67,27 +69,21 @@ public class Counter implements ApplicationComponent, PersistentStateComponent<C
 	 * Incrementing related to filename count of typed symbols
 	 * @param fileName
 	 */
-	public void increment (@NotNull String fileName) {
-		if (counterState.stateMap != null && counterState.stateMap.get(fileName) != null)
+	public void increment (@NotNull String fileName) throws ConcurrentModificationException {
+		if (counterState.stateMap.get(fileName) != null)
         	counterState.stateMap.put(fileName, counterState.stateMap.get(fileName) + 1);
-	    else if (counterState.stateMap != null)
-	    	counterState.stateMap.put(fileName, 1);
-	    else
-	    	counterState.stateMap = new ConcurrentHashMap<>();
+	    else counterState.stateMap.put(fileName, 1);
     }
 
 	/**
 	 * Decrementing related to filename count of typed symbols
 	 * @param fileName
 	 */
-	public void decrement(String fileName) {
-		Map<String, Integer> stateMap = counterState.stateMap;
-		if (counterState.stateMap != null && stateMap.get(fileName) != null)
+	public void decrement(@NotNull String fileName) throws ConcurrentModificationException {
+		final Map<String, Integer> stateMap = counterState.stateMap;
+		if (stateMap.get(fileName) != null)
 		    counterState.stateMap.put(fileName, counterState.stateMap.get(fileName) - 1);
-	    else if (counterState.stateMap != null)
-	    	counterState.stateMap.put(fileName, 0);
-	    else
-			counterState.stateMap = new ConcurrentHashMap<>();
+	    else counterState.stateMap.put(fileName, 0);
 	}
 
 	/**
@@ -96,10 +92,10 @@ public class Counter implements ApplicationComponent, PersistentStateComponent<C
 	 * @return
 	 */
 	public int getTypedSymbolsCount(@NotNull String fileName) {
-	    if (counterState.stateMap != null && counterState.stateMap.get(fileName) != null)
+	    if (counterState.stateMap.get(fileName) != null)
 		    return counterState.stateMap.get(fileName);
 	    else
-	    	return -1;
+	    	return 0;
     }
 
 	@Override
@@ -116,5 +112,6 @@ public class Counter implements ApplicationComponent, PersistentStateComponent<C
 		return String.valueOf(Counter.class);
 	}
 
+	@NotNull
 	public CounterState counterState = new CounterState();
 }

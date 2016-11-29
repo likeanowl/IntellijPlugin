@@ -23,19 +23,19 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
-    <typedHandler implementation="net.svitkov.ProductivityMetricsPlugin.handlers.CountingHandler"/>
-    <backspaceHandlerDelegate implementation="net.svitkov.ProductivityMetricsPlugin.handlers.BackspaceHandler" />
+    <typedHandler implementation="io.github.likeanowl.ProductivityMetricsPlugin.handlers.CountingHandler"/>
+    <backspaceHandlerDelegate implementation="io.github.likeanowl.ProductivityMetricsPlugin.handlers.BackspaceHandler" />
     <applicationService
-            serviceImplementation="net.svitkov.ProductivityMetricsPlugin.stuff.Counter"
-            serviceInterface="net.svitkov.ProductivityMetricsPlugin.stuff.Counter"
+            serviceImplementation="io.github.likeanowl.ProductivityMetricsPlugin.state.Counter"
+            serviceInterface="io.github.likeanowl.ProductivityMetricsPlugin.state.Counter"
             overrides="true"
     />
   </extensions>
 
   <application-components>
     <component>
-      <implementation-class>net.svitkov.ProductivityMetricsPlugin.stuff.Counter</implementation-class>
-      <interface-class>net.svitkov.ProductivityMetricsPlugin.stuff.Counter</interface-class>
+      <implementation-class>io.github.likeanowl.ProductivityMetricsPlugin.state.Counter</implementation-class>
+      <interface-class>io.github.likeanowl.ProductivityMetricsPlugin.state.Counter</interface-class>
     </component>
   </application-components>
 
@@ -47,7 +47,7 @@
            description="Shows your productivity metrics">
       <add-to-group group-id="MainMenu" anchor="last"/>
       <action id="ProductivityMetricsPlugin.Textboxes"
-              class="net.svitkov.ProductivityMetricsPlugin.actions.CountingAction" text="Show metrics"
+              class="io.github.likeanowl.ProductivityMetricsPlugin.actions.CountingAction" text="Show metrics"
               description=""/>
     </group>
   </actions>
