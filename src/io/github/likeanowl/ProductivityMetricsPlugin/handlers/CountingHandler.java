@@ -24,18 +24,18 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import io.github.likeanowl.ProductivityMetricsPlugin.state.Counter;
+import io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState;
 import org.jetbrains.annotations.NotNull;
 
 public class CountingHandler extends TypedHandlerDelegate {
 
 	@Override
     public Result charTyped(char c, final Project project, final @NotNull Editor editor, @NotNull final PsiFile file) {
-		Counter counter = Counter.getInstance();
+		PluginState pluginState = PluginState.getInstance();
 	    Document currentDocument = editor.getDocument();
 	    String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getName();
 		assert Thread.currentThread().equals(thread);
-	    ApplicationManager.getApplication().runReadAction(() -> counter.increment(openedFileName));
+	    ApplicationManager.getApplication().runReadAction(() -> pluginState.increment(openedFileName));
         return Result.CONTINUE;
     }
 

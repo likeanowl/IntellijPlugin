@@ -26,16 +26,16 @@
     <typedHandler implementation="io.github.likeanowl.ProductivityMetricsPlugin.handlers.CountingHandler"/>
     <backspaceHandlerDelegate implementation="io.github.likeanowl.ProductivityMetricsPlugin.handlers.BackspaceHandler" />
     <applicationService
-            serviceImplementation="io.github.likeanowl.ProductivityMetricsPlugin.state.Counter"
-            serviceInterface="io.github.likeanowl.ProductivityMetricsPlugin.state.Counter"
+            serviceImplementation="io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState"
+            serviceInterface="io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState"
             overrides="true"
     />
   </extensions>
 
   <application-components>
     <component>
-      <implementation-class>io.github.likeanowl.ProductivityMetricsPlugin.state.Counter</implementation-class>
-      <interface-class>io.github.likeanowl.ProductivityMetricsPlugin.state.Counter</interface-class>
+      <implementation-class>io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState</implementation-class>
+      <interface-class>io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState</interface-class>
     </component>
   </application-components>
 

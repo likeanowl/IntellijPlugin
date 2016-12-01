@@ -23,7 +23,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.psi.PsiFile;
-import io.github.likeanowl.ProductivityMetricsPlugin.state.Counter;
+import io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState;
 
 public class BackspaceHandler extends BackspaceHandlerDelegate{
 
@@ -35,11 +35,11 @@ public class BackspaceHandler extends BackspaceHandlerDelegate{
 	@Override
 	public boolean charDeleted(char c, PsiFile file, Editor editor) {
 		// Probably could be simplified
-		Counter counter = Counter.getInstance();
+		PluginState pluginState = PluginState.getInstance();
 		Document currentDocument = editor.getDocument();
 		String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getName();
 		assert Thread.currentThread().equals(thread);
-		ApplicationManager.getApplication().runReadAction(() -> counter.decrement(openedFileName));
+		ApplicationManager.getApplication().runReadAction(() -> pluginState.decrement(openedFileName));
 		return false;
 	}
 

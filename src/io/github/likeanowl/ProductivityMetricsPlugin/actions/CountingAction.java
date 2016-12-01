@@ -22,12 +22,12 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-import io.github.likeanowl.ProductivityMetricsPlugin.state.Counter;
+import io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState;
 
 public class CountingAction  extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
-        Counter counter = Counter.getInstance();
+        PluginState pluginState = PluginState.getInstance();
 		    StringBuilder sb = new StringBuilder();
 		    VirtualFile file = e.getData(PlatformDataKeys.VIRTUAL_FILE);
 		    assert file != null;
@@ -39,7 +39,7 @@ public class CountingAction  extends AnAction {
 				    .append("\nSymbols typed in file: ")
 				    .append(file.getPresentableName())
 				    .append(": ")
-				    .append(counter.getTypedSymbolsCount(file.getName()));
+				    .append(pluginState.getTypedSymbolsCount(file.getName()));
             Messages.showInfoMessage(sb.toString(), "Productivity Metrics");
     }
 }

@@ -28,41 +28,41 @@ import java.util.Map;
 /**
  * Serialization state
  */
-@State(name = "Counter",
+@State(name = "PluginState",
         storages = {
                 @Storage(id = "dir"
 		                , file = "counter.xml"
 		                , scheme = StorageScheme.DIRECTORY_BASED)
         })
-public final class Counter implements ApplicationComponent, PersistentStateComponent<Counter.CounterState> {
+public final class PluginState implements ApplicationComponent, PersistentStateComponent<PluginState.InnerState> {
 
 	/**
 	 * Nested class for saving serialization state.
 	 * Map is used for state saving for each class, existing in project.
 	 * Key is filename in form: package_name.classname (for Java) and object is just count of typed symbols
 	 */
-	public static class CounterState {
-		public CounterState() {
+	public static class InnerState {
+		public InnerState() {
 			stateMap = new HashMap<>();
 		}
 
-		@NotNull public final Map<String, Integer> stateMap;
+		@NotNull public Map<String, Integer> stateMap;
 	}
 
     @Nullable
     @Override
-    public CounterState getState() {
-        return counterState;
+    public InnerState getState() {
+        return innerState;
     }
 
     @Override
-    public void loadState(@Nullable CounterState state) {
-        this.counterState = state;
+    public void loadState(@NotNull InnerState state) {
+        this.innerState = state;
     }
 
     @NotNull
-    public static Counter getInstance() {
-	    return ServiceManager.getService(Counter.class);
+    public static PluginState getInstance() {
+	    return ServiceManager.getService(PluginState.class);
     }
 
 	/**
@@ -70,9 +70,9 @@ public final class Counter implements ApplicationComponent, PersistentStateCompo
 	 * @param fileName
 	 */
 	public void increment (@NotNull String fileName) throws ConcurrentModificationException {
-		if (counterState.stateMap.get(fileName) != null)
-        	counterState.stateMap.put(fileName, counterState.stateMap.get(fileName) + 1);
-	    else counterState.stateMap.put(fileName, 1);
+		if (innerState.stateMap.get(fileName) != null)
+        	innerState.stateMap.put(fileName, innerState.stateMap.get(fileName) + 1);
+	    else innerState.stateMap.put(fileName, 1);
     }
 
 	/**
@@ -80,10 +80,10 @@ public final class Counter implements ApplicationComponent, PersistentStateCompo
 	 * @param fileName
 	 */
 	public void decrement(@NotNull String fileName) throws ConcurrentModificationException {
-		final Map<String, Integer> stateMap = counterState.stateMap;
+		final Map<String, Integer> stateMap = innerState.stateMap;
 		if (stateMap.get(fileName) != null)
-		    counterState.stateMap.put(fileName, counterState.stateMap.get(fileName) - 1);
-	    else counterState.stateMap.put(fileName, 0);
+		    innerState.stateMap.put(fileName, innerState.stateMap.get(fileName) - 1);
+	    else innerState.stateMap.put(fileName, 0);
 	}
 
 	/**
@@ -92,8 +92,8 @@ public final class Counter implements ApplicationComponent, PersistentStateCompo
 	 * @return
 	 */
 	public int getTypedSymbolsCount(@NotNull String fileName) {
-	    if (counterState.stateMap.get(fileName) != null)
-		    return counterState.stateMap.get(fileName);
+	    if (innerState.stateMap.get(fileName) != null)
+		    return innerState.stateMap.get(fileName);
 	    else
 	    	return 0;
     }
@@ -109,9 +109,9 @@ public final class Counter implements ApplicationComponent, PersistentStateCompo
 	@NotNull
 	@Override
 	public String getComponentName() {
-		return String.valueOf(Counter.class);
+		return String.valueOf(PluginState.class);
 	}
 
 	@NotNull
-	public CounterState counterState = new CounterState();
+	public InnerState innerState = new InnerState();
 }
