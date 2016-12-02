@@ -22,26 +22,26 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState;
+import org.jetbrains.annotations.NotNull;
 
-public class BackspaceHandler extends BackspaceHandlerDelegate{
+public final class BackspaceHandler extends BackspaceHandlerDelegate{
 
 	@Override
-	public void beforeCharDeleted(char c, PsiFile file, Editor editor) {
-
+	public void beforeCharDeleted(char c, PsiFile file, @NotNull Editor editor) {
 	}
 
 	@Override
-	public boolean charDeleted(char c, PsiFile file, Editor editor) {
-		// Probably could be simplified
-		PluginState pluginState = PluginState.getInstance();
-		Document currentDocument = editor.getDocument();
-		String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getName();
-		assert Thread.currentThread().equals(thread);
-		ApplicationManager.getApplication().runReadAction(() -> pluginState.decrement(openedFileName));
+	public boolean charDeleted(char c, PsiFile file, @NotNull Editor editor) {
+		final PluginState pluginState = PluginState.getInstance();
+		final Document currentDocument = editor.getDocument();
+		final VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(currentDocument);
+		assert virtualFile != null;
+		final String openedFileName = virtualFile.getName();
+		ApplicationManager.getApplication().assertIsDispatchThread();
+		pluginState.decrement(openedFileName);
 		return false;
 	}
-
-	private final static Thread thread = Thread.currentThread();
 }

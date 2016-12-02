@@ -21,7 +21,6 @@ import com.intellij.openapi.components.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,11 +28,11 @@ import java.util.Map;
  * Serialization state
  */
 @State(name = "PluginState",
-        storages = {
-                @Storage(id = "dir"
-		                , file = "counter.xml"
-		                , scheme = StorageScheme.DIRECTORY_BASED)
-        })
+		storages = {
+				@Storage(id = "dir"
+						, file = "counter.xml"
+						, scheme = StorageScheme.DIRECTORY_BASED)
+		})
 public final class PluginState implements ApplicationComponent, PersistentStateComponent<PluginState.InnerState> {
 
 	/**
@@ -43,60 +42,87 @@ public final class PluginState implements ApplicationComponent, PersistentStateC
 	 */
 	public static class InnerState {
 		public InnerState() {
-			stateMap = new HashMap<>();
+			totalState = new HashMap<>();
 		}
 
-		@NotNull public Map<String, Integer> stateMap;
+		@NotNull
+		public Map<String, Integer> totalState;
 	}
 
-    @Nullable
-    @Override
-    public InnerState getState() {
-        return innerState;
-    }
+	@Nullable
+	@Override
+	public InnerState getState() {
+		return innerState;
+	}
 
-    @Override
-    public void loadState(@NotNull InnerState state) {
-        this.innerState = state;
-    }
+	@Override
+	public void loadState(@NotNull InnerState state) {
+		this.innerState = state;
+	}
 
-    @NotNull
-    public static PluginState getInstance() {
-	    return ServiceManager.getService(PluginState.class);
-    }
+	@NotNull
+	public static PluginState getInstance() {
+		return ServiceManager.getService(PluginState.class);
+	}
 
 	/**
 	 * Incrementing related to filename count of typed symbols
+	 *
 	 * @param fileName
 	 */
-	public void increment (@NotNull String fileName) throws ConcurrentModificationException {
-		if (innerState.stateMap.get(fileName) != null)
-        	innerState.stateMap.put(fileName, innerState.stateMap.get(fileName) + 1);
-	    else innerState.stateMap.put(fileName, 1);
-    }
+	public void increment(@NotNull String fileName) {
+		if (innerState.totalState.get(fileName) != null)
+			innerState.totalState.put(fileName, innerState.totalState.get(fileName) + 1);
+		else innerState.totalState.put(fileName, 1);
+		if (currentSessionState.get(fileName) != null)
+			currentSessionState.put(fileName, currentSessionState.get(fileName) + 1);
+		else
+			currentSessionState.put(fileName, 1);
+	}
 
 	/**
 	 * Decrementing related to filename count of typed symbols
+	 *
 	 * @param fileName
 	 */
-	public void decrement(@NotNull String fileName) throws ConcurrentModificationException {
-		final Map<String, Integer> stateMap = innerState.stateMap;
+	public void decrement(@NotNull String fileName) {
+		final Map<String, Integer> stateMap = innerState.totalState;
 		if (stateMap.get(fileName) != null)
-		    innerState.stateMap.put(fileName, innerState.stateMap.get(fileName) - 1);
-	    else innerState.stateMap.put(fileName, 0);
+			innerState.totalState.put(fileName, innerState.totalState.get(fileName) - 1);
+		else innerState.totalState.put(fileName, 0);
+		if (currentSessionState.get(fileName) != null)
+			currentSessionState.put(fileName, currentSessionState.get(fileName) - 1);
+		else
+			currentSessionState.put(fileName, 0);
 	}
 
 	/**
 	 * Returns typed symbols count related to specified file name
+	 *
 	 * @param fileName
 	 * @return
 	 */
-	public int getTypedSymbolsCount(@NotNull String fileName) {
-	    if (innerState.stateMap.get(fileName) != null)
-		    return innerState.stateMap.get(fileName);
-	    else
-	    	return 0;
-    }
+	public int getSymbolsTypedCountTotal(@NotNull String fileName) {
+		if (innerState.totalState.get(fileName) != null)
+			return innerState.totalState.get(fileName);
+		else
+			return 0;
+	}
+
+	public int getSymbolsTypedCountThisSession(@NotNull String fileName) {
+		if (currentSessionState.get(fileName) != null)
+			return currentSessionState.get(fileName);
+		else
+			return 0;
+	}
+
+	public void incrementTypingTime(long time) {
+		typingTime += time;
+	}
+
+	public long getTypingTime() {
+		return typingTime;
+	}
 
 	@Override
 	public void initComponent() {
@@ -114,4 +140,7 @@ public final class PluginState implements ApplicationComponent, PersistentStateC
 
 	@NotNull
 	public InnerState innerState = new InnerState();
+	@NotNull
+	private final Map<String, Integer> currentSessionState = new HashMap<>();
+	private long typingTime = 0;
 }

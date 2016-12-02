@@ -23,23 +23,29 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState;
+import org.jetbrains.annotations.NotNull;
 
-public class CountingAction  extends AnAction {
-    @Override
-    public void actionPerformed(AnActionEvent e) {
-        PluginState pluginState = PluginState.getInstance();
-		    StringBuilder sb = new StringBuilder();
-		    VirtualFile file = e.getData(PlatformDataKeys.VIRTUAL_FILE);
-		    assert file != null;
-		    sb.append("In this work session:")
-				    .append("\nTotal time spent on typing: ")
-				    .append("")
-				    .append("\nYour average typing speed:")
-				    .append("")
-				    .append("\nSymbols typed in file: ")
-				    .append(file.getPresentableName())
-				    .append(": ")
-				    .append(pluginState.getTypedSymbolsCount(file.getName()));
-            Messages.showInfoMessage(sb.toString(), "Productivity Metrics");
-    }
+public final class CountingAction extends AnAction {
+	@Override
+	public void actionPerformed(@NotNull AnActionEvent e) {
+		final PluginState pluginState = PluginState.getInstance();
+		final StringBuilder sb = new StringBuilder();
+		final VirtualFile file = e.getData(PlatformDataKeys.VIRTUAL_FILE);
+		assert file != null;
+		int symbolsPerMinute = (int) (pluginState.getSymbolsTypedCountThisSession(file.getName()) / (pluginState
+				.getTypingTime() /
+				60000.0));
+		sb.append("In this work session:")
+				.append("\nTotal time spent on typing: ")
+				.append(pluginState.getTypingTime() / 1000.0)
+				.append(" seconds")
+				.append("\nYour average typing speed: ")
+				.append(symbolsPerMinute)
+				.append(" symbols/minute")
+				.append("\nSymbols typed in file: ")
+				.append(file.getPresentableName())
+				.append(": ")
+				.append(pluginState.getSymbolsTypedCountThisSession(file.getName()));
+		Messages.showInfoMessage(sb.toString(), "Productivity Metrics");
+	}
 }

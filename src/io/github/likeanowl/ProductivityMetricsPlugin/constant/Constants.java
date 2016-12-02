@@ -17,7 +17,7 @@
 
 package io.github.likeanowl.ProductivityMetricsPlugin.constant;
 
-public class Constants {
+public final class Constants {
 	private Constants() {}
 	//For typing speed measure
 	public final static int TYPING_LIMIT = 1;

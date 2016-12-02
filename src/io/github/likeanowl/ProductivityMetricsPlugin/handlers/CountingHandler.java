@@ -22,22 +22,39 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState;
 import org.jetbrains.annotations.NotNull;
 
-public class CountingHandler extends TypedHandlerDelegate {
+import static java.lang.System.currentTimeMillis;
+
+public final class CountingHandler extends TypedHandlerDelegate {
+	public Result beforeCharTyped(char c, final @NotNull Project project, final @NotNull Editor editor, final PsiFile file
+			, final FileType fileType) {
+		if (firstTime == 0) firstTime = currentTimeMillis();
+		return Result.CONTINUE;
+	}
 
 	@Override
-    public Result charTyped(char c, final Project project, final @NotNull Editor editor, @NotNull final PsiFile file) {
-		PluginState pluginState = PluginState.getInstance();
-	    Document currentDocument = editor.getDocument();
-	    String openedFileName = FileDocumentManager.getInstance().getFile(currentDocument).getName();
-		assert Thread.currentThread().equals(thread);
-	    ApplicationManager.getApplication().runReadAction(() -> pluginState.increment(openedFileName));
-        return Result.CONTINUE;
-    }
+	public Result charTyped(char c, final @NotNull Project project, final @NotNull Editor editor
+			, final PsiFile file) {
+		final PluginState pluginState = PluginState.getInstance();
+		final Document currentDocument = editor.getDocument();
+		final VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(currentDocument);
+		assert virtualFile != null;
+		final String openedFileName = virtualFile.getName();
+		ApplicationManager.getApplication().assertIsDispatchThread();
+		pluginState.increment(openedFileName);
+		firstTime = currentTimeMillis() - firstTime;
+		if (firstTime > 0 && firstTime < 1000) {
+			pluginState.incrementTypingTime(firstTime);
+			firstTime = currentTimeMillis();
+		} else firstTime = 0;
+		return Result.CONTINUE;
+	}
 
-	private final static Thread thread = Thread.currentThread();
+	long firstTime = 0;
 }
