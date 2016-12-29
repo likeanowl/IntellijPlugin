@@ -23,18 +23,32 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
+    <typedHandler implementation="io.github.likeanowl.ProductivityMetricsPlugin.handlers.CountingHandler"/>
+    <backspaceHandlerDelegate implementation="io.github.likeanowl.ProductivityMetricsPlugin.handlers.BackspaceHandler" />
+    <applicationService
+            serviceImplementation="io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState"
+            serviceInterface="io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState"
+            overrides="true"
+    />
   </extensions>
 
   <application-components>
+    <component>
+      <implementation-class>io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState</implementation-class>
+      <interface-class>io.github.likeanowl.ProductivityMetricsPlugin.state.PluginState</interface-class>
+    </component>
   </application-components>
 
   <project-components>
   </project-components>
 
   <actions>
-    <group id="MyPlugin.SampleMenu" text="Greeting" description="Greeting menu">
+    <group id="ProductivityMetricsPlugin.SampleMenu" text="Productivity"
+           description="Shows your productivity metrics">
       <add-to-group group-id="MainMenu" anchor="last"/>
-      <action id="Myplugin.Textboxes" class="main.HelloAction" text="Hello" description="Says hello"/>
+      <action id="ProductivityMetricsPlugin.Textboxes"
+              class="io.github.likeanowl.ProductivityMetricsPlugin.actions.CountingAction" text="Show metrics"
+              description=""/>
     </group>
   </actions>
 
